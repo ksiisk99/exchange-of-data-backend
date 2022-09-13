@@ -1,7 +1,7 @@
 package com.ay.exchange.filter;
 
 import com.ay.exchange.jwt.JwtTokenProvider;
-import com.ay.exchange.jwt.authority.Authority;
+import com.ay.exchange.user.entity.Authority;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package com.ay.exchange.jwt;
 
-import com.ay.exchange.jwt.authority.Authority;
+import com.ay.exchange.user.entity.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.security.Key;
-import java.util.Calendar;
 import java.util.Date;
 
 @Component
