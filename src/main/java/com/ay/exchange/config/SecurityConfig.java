@@ -1,5 +1,6 @@
 package com.ay.exchange.config;
 
+import com.ay.exchange.jwt.JwtFilterEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,6 +15,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CorsConfig corsConfig;
+    private final JwtFilterEntryPoint jwtFilterEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -24,7 +26,9 @@ public class SecurityConfig {
                 .and()
                 .cors().configurationSource(corsConfig.corsConfigurationSource())
                 .and()
-                .formLogin().disable();
+                .formLogin().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtFilterEntryPoint);
         return http.build();
 
     }
