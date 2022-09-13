@@ -8,6 +8,4 @@ import lombok.Getter;
 public class SignInRequest {
     private String userId;
     private String password;
-    private String email;
-    private String nickName;
 }
