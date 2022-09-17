@@ -10,7 +10,6 @@ import java.util.Date;
 @Getter
 public class User extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String userId;
 
     @Column(nullable = false)
@@ -26,4 +25,12 @@ public class User extends BaseEntity {
     @Temporal(TemporalType.DATE)
     private Date suspendedDate;
     protected User() {}
+
+    public User(String userId,String password, String email, String nickName, Authority authority) {
+        this.userId=userId;
+        this.password = password;
+        this.email = email;
+        this.nickName = nickName;
+        this.authority = authority;
+    }
 }
