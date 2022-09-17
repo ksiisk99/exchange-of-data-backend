@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,15 +17,17 @@ import java.security.Key;
 import java.util.Date;
 
 @Component
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class JwtTokenProvider {
     @Value("${jwt.secret-key}")
-    private final String secretKey;
+    private String secretKey;
     @Value("${jwt.access-expire-time}")
-    private final Long ACCESS_EXPIRE_TIME;
+    private Long ACCESS_EXPIRE_TIME;
     @Value("${jwt.refresh-expire-time}")
-    private final Long REFRESH_EXPIRE_TIME;
+    private Long REFRESH_EXPIRE_TIME;
     private Key key;
+
+
 
     @PostConstruct
     public void initKey(){
@@ -73,5 +76,16 @@ public class JwtTokenProvider {
         }catch (IllegalArgumentException e){ //NULL 토큰
             return null;
         }
+    }
+
+    public String createVerificationCodeToken(String verificationCode) {
+        Claims claims= Jwts.claims();
+        claims.put("verificationCode",verificationCode);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(new Date(new Date().getTime() + 180000))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
     }
 }
