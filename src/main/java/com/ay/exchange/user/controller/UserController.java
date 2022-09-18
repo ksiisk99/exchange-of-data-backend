@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/ay/user")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -27,12 +27,24 @@ public class UserController {
     }
 
     @GetMapping("/verification-code/{email}")
-    public ResponseEntity<VerificationCodeResponse> getVerificationCode(
+    public ResponseEntity<VerificationCodeResponse> verificationCode(
             @PathVariable("email") String email
     ){
-        VerificationCodeResponse response=userService
-                .getVerificationCode(email);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(userService.getVerificationCode(email));
+    }
+
+    @GetMapping("/existence/userId/{userId}")
+    public ResponseEntity<Boolean> existsUserId(
+            @PathVariable("userId") String userId
+    ){
+        return ResponseEntity.ok(userService.checkExistsUserId(userId));
+    }
+
+    @GetMapping("/existence/email/{email}")
+    public ResponseEntity<Boolean> existsEmail(
+            @PathVariable("email")String email
+    ){
+        return ResponseEntity.ok(userService.checkExistsNickName(email));
     }
 
 
