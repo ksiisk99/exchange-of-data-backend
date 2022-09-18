@@ -13,7 +13,7 @@ import com.ay.exchange.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,28 +21,27 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
 
     public SignInResponse signIn(SignInRequest signInRequest) {
-        String pass=bCryptPasswordEncoder.encode(signInRequest.getPassword());
-        System.out.println(pass);
+        UserInfoDto userInfoDto = userRepository.findUserInfoByUserId(signInRequest.getUserId()).get();
 
-        UserInfoDto userInfoDto = userRepository.findByUserIdAndPassword(
-                signInRequest.getUserId()
-                , pass
-        ).get();
+        if(passwordEncoder.matches(signInRequest.getPassword()
+                , userInfoDto.getPassword())){
+            return new SignInResponse(
+                    "ABCD"
+                    , userInfoDto.getNickName()
+                    , userInfoDto.getAuthority()
+                    , userInfoDto.getSuspendedDate()
+            );
+        }
+        return null;
 
-        return new SignInResponse(
-                "ABCD"
-                , userInfoDto.getNickName()
-                , userInfoDto.getAuthority()
-                , userInfoDto.getSuspendedDate()
-        );
     }
 
     public SignUpResponse signUp(SignUpRequest signUpRequest) {
-        String pass=bCryptPasswordEncoder.encode(signUpRequest.getPassword());
+        String pass= passwordEncoder.encode(signUpRequest.getPassword());
         System.out.println(pass);
 
         userRepository.save(new User(
@@ -89,4 +88,11 @@ public class UserService {
         return sb.toString();
     }
 
+    public Boolean checkExistsUserId(String userId) {
+        return userRepository.existsById(userId);
+    }
+
+    public Boolean checkExistsNickName(String nickName) {
+        return userRepository.existsById(nickName);
+    }
 }
