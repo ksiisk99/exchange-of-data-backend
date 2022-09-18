@@ -9,10 +9,7 @@ import com.ay.exchange.user.dto.response.VerificationCodeResponse;
 import com.ay.exchange.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/ay/user")
@@ -29,12 +26,14 @@ public class UserController {
         return ResponseEntity.ok(userService.signUp(signUpRequest));
     }
 
-    @PostMapping("/verification-code")
+    @GetMapping("/verification-code/{email}")
     public ResponseEntity<VerificationCodeResponse> getVerificationCode(
-            @RequestBody VerificationCodeRequest verificationCodeRequest
+            @PathVariable("email") String email
     ){
         VerificationCodeResponse response=userService
-                .getVerificationCode(verificationCodeRequest);
+                .getVerificationCode(email);
         return ResponseEntity.ok(response);
     }
+
+
 }

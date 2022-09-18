@@ -4,7 +4,6 @@ import com.ay.exchange.jwt.JwtTokenProvider;
 import com.ay.exchange.user.dto.query.UserInfoDto;
 import com.ay.exchange.user.dto.request.SignInRequest;
 import com.ay.exchange.user.dto.request.SignUpRequest;
-import com.ay.exchange.user.dto.request.VerificationCodeRequest;
 import com.ay.exchange.user.dto.response.SignInResponse;
 import com.ay.exchange.user.dto.response.SignUpResponse;
 import com.ay.exchange.user.dto.response.VerificationCodeResponse;
@@ -61,10 +60,10 @@ public class UserService {
         );
     }
 
-    public VerificationCodeResponse getVerificationCode(VerificationCodeRequest verificationCodeRequest) {
+    public VerificationCodeResponse getVerificationCode(String email) {
         String verificationCode=createVerificationCode();
 
-        sendVerificationCodeByMail(verificationCodeRequest.getEmail(), verificationCode);
+        sendVerificationCodeByMail(email, verificationCode);
 
         return new VerificationCodeResponse(
                 jwtTokenProvider.createVerificationCodeToken(verificationCode));
