@@ -43,7 +43,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer(){
         return (web) -> web
                 .ignoring()//"/get/authorize"
-                .antMatchers("/ay/user/**");
+                .antMatchers("/user/**");
     }
 
 }
