@@ -10,6 +10,7 @@ import com.ay.exchange.user.dto.response.VerificationCodeResponse;
 import com.ay.exchange.user.entity.Authority;
 import com.ay.exchange.user.entity.User;
 import com.ay.exchange.user.exception.NotExistsUserException;
+import com.ay.exchange.user.exception.NotExistsUserIdException;
 import com.ay.exchange.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -46,7 +47,6 @@ public class UserService {
 
     public SignUpResponse signUp(SignUpRequest signUpRequest) {
         String pass = passwordEncoder.encode(signUpRequest.getPassword());
-        System.out.println(pass);
 
         userRepository.save(new User(
                 signUpRequest.getUserId()
@@ -98,5 +98,16 @@ public class UserService {
 
     public Boolean checkExistsNickName(String nickName) {
         return userRepository.existsById(nickName);
+    }
+
+    public String findUserId(String email) {
+        String userId=userRepository
+                .findUserIdByEmail(email)
+                .orElseThrow(()-> {
+                    throw new NotExistsUserIdException();
+                })
+                .getUserId();
+
+        return userId;
     }
 }

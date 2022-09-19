@@ -47,5 +47,11 @@ public class UserController {
         return ResponseEntity.ok(userService.checkExistsNickName(email));
     }
 
+    @GetMapping("/find/id/{email}")
+    public ResponseEntity<String> searchUserId(
+            @PathVariable("email") String email
+    ){
+        return ResponseEntity.ok(userService.findUserId(email));
+    }
 
 }

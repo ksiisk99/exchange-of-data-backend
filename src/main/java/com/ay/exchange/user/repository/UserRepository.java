@@ -1,5 +1,6 @@
 package com.ay.exchange.user.repository;
 
+import com.ay.exchange.user.dto.query.UserIdDto;
 import com.ay.exchange.user.dto.query.UserInfoDto;
 import com.ay.exchange.user.dto.response.SignInResponse;
 import com.ay.exchange.user.dto.response.SignUpResponse;
@@ -17,4 +18,5 @@ public interface UserRepository extends JpaRepository<User,String> {
 
     Optional<UserInfoDto> findUserInfoByUserId(String userId);
 
+    Optional<UserIdDto> findUserIdByEmail(String email);
 }
