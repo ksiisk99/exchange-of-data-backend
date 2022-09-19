@@ -9,6 +9,7 @@ import com.ay.exchange.user.dto.response.SignUpResponse;
 import com.ay.exchange.user.dto.response.VerificationCodeResponse;
 import com.ay.exchange.user.entity.Authority;
 import com.ay.exchange.user.entity.User;
+import com.ay.exchange.user.exception.NotExistsUserException;
 import com.ay.exchange.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -25,10 +26,14 @@ public class UserService {
     private final JavaMailSender javaMailSender;
 
     public SignInResponse signIn(SignInRequest signInRequest) {
-        UserInfoDto userInfoDto = userRepository.findUserInfoByUserId(signInRequest.getUserId()).get();
+        UserInfoDto userInfoDto = userRepository
+                .findUserInfoByUserId(signInRequest.getUserId())
+                .orElseThrow(() -> {
+                    throw new NotExistsUserException();
+                });
 
-        if(passwordEncoder.matches(signInRequest.getPassword()
-                , userInfoDto.getPassword())){
+        if (passwordEncoder.matches(signInRequest.getPassword(),
+                userInfoDto.getPassword())) {
             return new SignInResponse(
                     "ABCD"
                     , userInfoDto.getNickName()
@@ -37,11 +42,10 @@ public class UserService {
             );
         }
         return null;
-
     }
 
     public SignUpResponse signUp(SignUpRequest signUpRequest) {
-        String pass= passwordEncoder.encode(signUpRequest.getPassword());
+        String pass = passwordEncoder.encode(signUpRequest.getPassword());
         System.out.println(pass);
 
         userRepository.save(new User(
@@ -60,7 +64,7 @@ public class UserService {
     }
 
     public VerificationCodeResponse getVerificationCode(String email) {
-        String verificationCode=createVerificationCode();
+        String verificationCode = createVerificationCode();
 
         sendVerificationCodeByMail(email, verificationCode);
 
@@ -68,8 +72,8 @@ public class UserService {
                 jwtTokenProvider.createVerificationCodeToken(verificationCode));
     }
 
-    private void sendVerificationCodeByMail(String email, String verificationCode){
-        SimpleMailMessage message=new SimpleMailMessage();
+    private void sendVerificationCodeByMail(String email, String verificationCode) {
+        SimpleMailMessage message = new SimpleMailMessage();
 
         message.setTo(email);
         message.setSubject("자료주냥 인증번호");
@@ -78,11 +82,11 @@ public class UserService {
         javaMailSender.send(message);
     }
 
-    private String createVerificationCode(){
+    private String createVerificationCode() {
         StringBuilder sb = new StringBuilder();
 
-        for(int i=0;i<6;i++){
-            sb.append(String.valueOf((int)(Math.random()*9+1)));
+        for (int i = 0; i < 6; i++) {
+            sb.append((int) (Math.random() * 9 + 1));
         }
 
         return sb.toString();

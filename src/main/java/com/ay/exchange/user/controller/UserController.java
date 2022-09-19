@@ -33,7 +33,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getVerificationCode(email));
     }
 
-    @GetMapping("/existence/userId/{userId}")
+    @GetMapping("/existence/id/{userId}")
     public ResponseEntity<Boolean> existsUserId(
             @PathVariable("userId") String userId
     ){
