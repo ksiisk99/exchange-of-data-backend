@@ -8,7 +8,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -28,17 +27,16 @@ public class JwtTokenProvider {
     private Key key;
 
 
-
     @PostConstruct
-    public void initKey(){
-        byte[] keyBytes= Decoders.BASE64.decode(secretKey);
-        key= Keys.hmacShaKeyFor(keyBytes);
+    public void initKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(String id, Authority authority){
-        Claims claims= Jwts.claims();
+    public String createToken(String id, Authority authority) {
+        Claims claims = Jwts.claims();
         claims.setSubject(id);
-        claims.put("authority",authority);
+        claims.put("authority", authority);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -47,7 +45,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) {
         try {
             return !Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -56,14 +54,14 @@ public class JwtTokenProvider {
                     .getBody()
                     .getExpiration()
                     .before(new Date());
-        }catch(JwtException e){ //유효하지 않은 토큰
+        } catch (JwtException e) { //유효하지 않은 토큰
             return false;
-        }catch(IllegalArgumentException e){ //NULL 토큰
+        } catch (IllegalArgumentException e) { //NULL 토큰
             return false;
         }
     }
 
-    public Authority getAuthority(String token){
+    public Authority getAuthority(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -71,21 +69,55 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token)
                     .getBody()
                     .get("authority", Authority.class);
-        }catch(JwtException e){ //유효하지 않은 토큰
+        } catch (JwtException e) { //유효하지 않은 토큰
             return null;
-        }catch (IllegalArgumentException e){ //NULL 토큰
+        } catch (IllegalArgumentException e) { //NULL 토큰
             return null;
         }
     }
 
-    public String createVerificationCodeToken(String verificationCode) {
-        Claims claims= Jwts.claims();
-        claims.put("verificationCode",verificationCode);
+    public String createVerificationCodeToken(
+            String verificationCode
+            , String email
+    ) {
+        Claims claims = Jwts.claims();
+        claims.setSubject(email);
+        claims.put("verificationCode", verificationCode);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(new Date(new Date().getTime() + 180000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String getVerificationCode(String verificationCodeToken) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(verificationCodeToken)
+                    .getBody()
+                    .get("verificationCode", String.class);
+        } catch (JwtException e) { //유효하지 않은 토큰
+            return null;
+        } catch (IllegalArgumentException e) { //NULL 토큰
+            return null;
+        }
+    }
+
+    public String getEmail(String token){
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+        } catch (JwtException e) { //유효하지 않은 토큰
+            return null;
+        } catch (IllegalArgumentException e) { //NULL 토큰
+            return null;
+        }
     }
 }

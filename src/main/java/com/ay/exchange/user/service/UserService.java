@@ -4,6 +4,7 @@ import com.ay.exchange.jwt.JwtTokenProvider;
 import com.ay.exchange.user.dto.query.UserInfoDto;
 import com.ay.exchange.user.dto.request.SignInRequest;
 import com.ay.exchange.user.dto.request.SignUpRequest;
+import com.ay.exchange.user.dto.request.UpdatePasswordRequest;
 import com.ay.exchange.user.dto.response.SignInResponse;
 import com.ay.exchange.user.dto.response.SignUpResponse;
 import com.ay.exchange.user.dto.response.VerificationCodeResponse;
@@ -42,7 +43,7 @@ public class UserService {
                     , userInfoDto.getSuspendedDate()
             );
         }
-        return null;
+        throw new NotExistsUserException();
     }
 
     public SignUpResponse signUp(SignUpRequest signUpRequest) {
@@ -69,7 +70,7 @@ public class UserService {
         sendVerificationCodeByMail(email, verificationCode);
 
         return new VerificationCodeResponse(
-                jwtTokenProvider.createVerificationCodeToken(verificationCode));
+                jwtTokenProvider.createVerificationCodeToken(verificationCode, email));
     }
 
     private void sendVerificationCodeByMail(String email, String verificationCode) {
@@ -88,7 +89,7 @@ public class UserService {
         for (int i = 0; i < 6; i++) {
             sb.append((int) (Math.random() * 9 + 1));
         }
-
+        System.out.println("veriCode: "+sb.toString());
         return sb.toString();
     }
 
@@ -101,13 +102,46 @@ public class UserService {
     }
 
     public String findUserId(String email) {
-        String userId=userRepository
+        return userRepository
                 .findUserIdByEmail(email)
-                .orElseThrow(()-> {
+                .orElseThrow(() -> {
                     throw new NotExistsUserIdException();
-                })
-                .getUserId();
+                }).getUserId();
+    }
 
-        return userId;
+    private Boolean updateUserPassword(
+            String email, String password
+    ) {
+        userRepository.updatePassword(email, passwordEncoder.encode(password));
+        return true;
+    }
+
+    public String getTemporaryPassword(
+            String number, String verificationCodeToken
+    ) {
+        String verificationCode = jwtTokenProvider
+                .getVerificationCode(verificationCodeToken);
+
+        if(verificationCode.equals(number)){
+            String temporaryPassword = createTemporaryPassword();
+            String email=jwtTokenProvider.getEmail(verificationCodeToken);
+
+            if(updateUserPassword(
+                    email
+                    ,passwordEncoder.encode(temporaryPassword))
+            ){
+                return temporaryPassword;
+            }
+        }
+        return null;
+    }
+
+    private String createTemporaryPassword(){
+        StringBuilder password=new StringBuilder();
+
+        for(int i=0;i<6;i++){
+            password.append((char)(Math.random()*26+65));
+        }
+        return password.toString();
     }
 }
