@@ -2,8 +2,6 @@ package com.ay.exchange.user.controller;
 
 import com.ay.exchange.user.dto.request.SignInRequest;
 import com.ay.exchange.user.dto.request.SignUpRequest;
-import com.ay.exchange.user.dto.request.UpdatePasswordRequest;
-import com.ay.exchange.user.dto.request.VerificationCodeRequest;
 import com.ay.exchange.user.dto.response.SignInResponse;
 import com.ay.exchange.user.dto.response.SignUpResponse;
 import com.ay.exchange.user.dto.response.VerificationCodeResponse;
@@ -41,12 +39,12 @@ public class UserController {
     }
 
     @GetMapping("/temporary-password/{number}")
-    public ResponseEntity<String>getTemporaryPassword(
+    public ResponseEntity<String> getTemporaryPassword(
             @PathVariable("number") String number
             , @RequestHeader("token") String verificationCodeToken
-    ){
+    ) {
         return ResponseEntity.ok(userService
-                .getTemporaryPassword(number,verificationCodeToken));
+                .getTemporaryPassword(number, verificationCodeToken));
     }
 
     @GetMapping("/existence-id/{userId}")
@@ -69,6 +67,7 @@ public class UserController {
     ) {
         return ResponseEntity.ok(userService.findUserId(email));
     }
+
 
 //    @PatchMapping("/update-password")
 //    public ResponseEntity<Boolean> updatePassword(
