@@ -19,7 +19,15 @@ public class Board {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Category category;
+    private LargeCategory largeCategory;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MediumCategory mediumCategory;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SmallCategory smallCategory;
 
     private String subjectName;
     private String professorName;

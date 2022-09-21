@@ -1,5 +1,5 @@
 package com.ay.exchange.board.entity;
 
-public enum Category {
+public enum LargeCategory {
     Major, GE, Etc
 }
