@@ -1,6 +1,7 @@
 package com.ay.exchange.user.entity;
 
 import com.ay.exchange.common.entity.BaseEntity;
+import com.ay.exchange.user.entity.vo.Authority;
 import lombok.Getter;
 
 import javax.persistence.*;

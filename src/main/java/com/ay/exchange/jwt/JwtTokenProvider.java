@@ -1,6 +1,6 @@
 package com.ay.exchange.jwt;
 
-import com.ay.exchange.user.entity.Authority;
+import com.ay.exchange.user.entity.vo.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
