@@ -1,6 +1,6 @@
 package com.ay.exchange.board.dto.request;
 
-import com.ay.exchange.board.entity.LargeCategory;
+import com.ay.exchange.board.entity.vo.LargeCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

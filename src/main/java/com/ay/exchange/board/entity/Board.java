@@ -1,5 +1,9 @@
 package com.ay.exchange.board.entity;
 
+import com.ay.exchange.board.entity.vo.BoardCategory;
+import com.ay.exchange.board.entity.vo.LargeCategory;
+import com.ay.exchange.board.entity.vo.MediumCategory;
+import com.ay.exchange.board.entity.vo.SmallCategory;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -9,6 +13,7 @@ import javax.persistence.*;
 @Getter
 public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "board_id")
     private Long Id;
 
     @Column(nullable = false)
@@ -17,20 +22,8 @@ public class Board {
     @Column(nullable = false)
     private String writer;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private LargeCategory largeCategory;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private MediumCategory mediumCategory;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private SmallCategory smallCategory;
-
-    private String subjectName;
-    private String professorName;
+    @Embedded
+    private BoardCategory category;
 
     @Column(nullable = false)
     private Long views;
@@ -47,4 +40,11 @@ public class Board {
 
     @Column(nullable = false)
     private Boolean approval;
+
+    @OneToOne(fetch = FetchType.LAZY
+            , cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "board_content_id")
+    private BoardContent boardContent;
+
+
 }

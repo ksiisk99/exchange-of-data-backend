@@ -1,4 +1,4 @@
-package com.ay.exchange.board.entity;
+package com.ay.exchange.board.entity.vo;
 
 public enum MediumCategory {
     //Major (창의융합, 사회과학, 예술체육, 인문, 신학)

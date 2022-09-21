@@ -1,4 +1,4 @@
-package com.ay.exchange.board.entity;
+package com.ay.exchange.board.entity.vo;
 
 public enum SmallCategory {
     //Major
