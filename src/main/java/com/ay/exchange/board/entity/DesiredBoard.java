@@ -1,13 +1,15 @@
 package com.ay.exchange.board.entity;
 
 import com.ay.exchange.board.entity.vo.BoardCategory;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-public class DesiredBoard{
+@Builder
+public class DesiredBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "desired_board_id")
@@ -23,4 +25,5 @@ public class DesiredBoard{
 
     @Embedded
     private BoardCategory category;
+
 }

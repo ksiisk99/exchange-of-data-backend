@@ -17,9 +17,15 @@ public class BoardContent {
             , cascade = CascadeType.ALL,orphanRemoval = true)
     private List<DesiredBoard>desiredBoards;
 
-    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    @Column(nullable = false, length = 200)
     private String content;
 
     @Column(nullable = false)
     private String filePath;
+
+    public BoardContent(String content, String filePath) {
+        this.content = content;
+        this.filePath = filePath;
+    }
+
 }
