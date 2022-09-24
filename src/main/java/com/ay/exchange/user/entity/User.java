@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,10 +28,9 @@ public class User extends BaseEntity {
     @Temporal(TemporalType.DATE)
     private Date suspendedDate;
 
-    @OneToOne(fetch = FetchType.LAZY
-            , cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "board_id")
-    private Board board;
+    private List<Board> boards;
     protected User() {}
 
     public User(String userId,String password, String email, String nickName, Authority authority) {
