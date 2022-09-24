@@ -1,5 +1,6 @@
 package com.ay.exchange.user.entity;
 
+import com.ay.exchange.board.entity.Board;
 import com.ay.exchange.common.entity.BaseEntity;
 import com.ay.exchange.user.entity.vo.Authority;
 import lombok.Getter;
@@ -25,6 +26,11 @@ public class User extends BaseEntity {
 
     @Temporal(TemporalType.DATE)
     private Date suspendedDate;
+
+    @OneToOne(fetch = FetchType.LAZY
+            , cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "board_id")
+    private Board board;
     protected User() {}
 
     public User(String userId,String password, String email, String nickName, Authority authority) {
