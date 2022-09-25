@@ -28,6 +28,9 @@ public class Comment {
     private String writer;
 
     @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)

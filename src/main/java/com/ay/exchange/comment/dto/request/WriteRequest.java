@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class WriteRequest {
     private Long boardContentId;
+    private String email;
     private String writer;
     private String content;
     private Boolean depth;
