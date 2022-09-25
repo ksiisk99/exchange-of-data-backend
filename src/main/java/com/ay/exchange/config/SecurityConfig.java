@@ -1,5 +1,6 @@
 package com.ay.exchange.config;
 
+import com.ay.exchange.filter.JwtExceptionFilter;
 import com.ay.exchange.filter.JwtFilter;
 import com.ay.exchange.jwt.JwtFilterEntryPoint;
 import com.ay.exchange.jwt.JwtTokenProvider;
@@ -21,6 +22,7 @@ public class SecurityConfig {
     private final CorsConfig corsConfig;
     private final JwtFilterEntryPoint jwtFilterEntryPoint;
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -34,8 +36,8 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .addFilterBefore(new JwtFilter(jwtTokenProvider)
                     , UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtFilterEntryPoint);
+                .addFilterBefore(jwtExceptionFilter,JwtFilter.class);
+                //.exceptionHandling().authenticationEntryPoint(jwtFilterEntryPoint);
         return http.build();
     }
 

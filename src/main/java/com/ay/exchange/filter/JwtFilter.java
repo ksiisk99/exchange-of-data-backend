@@ -2,6 +2,7 @@ package com.ay.exchange.filter;
 
 import com.ay.exchange.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -16,13 +17,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token=request.getHeader("token");
-
-        if(!jwtTokenProvider.validateToken(token)){ //유효하지 않은 토큰
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
-
+        jwtTokenProvider.validateToken(request.getHeader("token"));
         filterChain.doFilter(request,response);
     }
 }
