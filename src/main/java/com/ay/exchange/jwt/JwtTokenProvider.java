@@ -45,19 +45,17 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public boolean validateToken(String token) {
+    public void validateToken(String token) {
         try {
-            return !Jwts.parserBuilder()
+            Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
                     .getBody()
                     .getExpiration()
                     .before(new Date());
-        } catch (JwtException e) { //유효하지 않은 토큰
-            return false;
-        } catch (IllegalArgumentException e) { //NULL 토큰
-            return false;
+        } catch (JwtException | IllegalArgumentException e) { //유효하지 않은 토큰
+            throw new JwtException("유효하지 않은 토큰");
         }
     }
 
@@ -69,10 +67,8 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token)
                     .getBody()
                     .get("authority", Authority.class);
-        } catch (JwtException e) { //유효하지 않은 토큰
-            return null;
-        } catch (IllegalArgumentException e) { //NULL 토큰
-            return null;
+        } catch (JwtException | IllegalArgumentException e) { //유효하지 않은 토큰
+            throw new JwtException("유효하지 않은 토큰");
         }
     }
 
@@ -99,10 +95,8 @@ public class JwtTokenProvider {
                     .parseClaimsJws(verificationCodeToken)
                     .getBody()
                     .get("verificationCode", String.class);
-        } catch (JwtException e) { //유효하지 않은 토큰
-            return null;
-        } catch (IllegalArgumentException e) { //NULL 토큰
-            return null;
+        } catch (JwtException | IllegalArgumentException e) { //유효하지 않은 토큰
+            throw new JwtException("유효하지 않은 토큰");
         }
     }
 
@@ -114,10 +108,8 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token)
                     .getBody()
                     .getSubject();
-        } catch (JwtException e) { //유효하지 않은 토큰
-            return null;
-        } catch (IllegalArgumentException e) { //NULL 토큰
-            return null;
+        } catch (JwtException | IllegalArgumentException e) { //유효하지 않은 토큰
+            throw new JwtException("유효하지 않은 토큰");
         }
     }
 }
