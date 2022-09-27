@@ -4,6 +4,7 @@ import com.ay.exchange.board.entity.vo.BoardCategory;
 import com.ay.exchange.board.entity.vo.LargeCategory;
 import com.ay.exchange.board.entity.vo.MediumCategory;
 import com.ay.exchange.board.entity.vo.SmallCategory;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Board {
     @Id
@@ -49,8 +52,8 @@ public class Board {
 
     @OneToOne(fetch = FetchType.LAZY
             , cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "board_content_id")
-    private BoardContent boardContent;
+    @JoinColumn(name = "board_id")
+    private Board board;
 
 
 

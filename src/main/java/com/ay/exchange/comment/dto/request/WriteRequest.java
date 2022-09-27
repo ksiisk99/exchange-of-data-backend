@@ -13,5 +13,5 @@ public class WriteRequest {
     private String writer;
     private String content;
     private Boolean depth;
-    private Long group;
+    private Long groupId;
 }

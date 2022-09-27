@@ -29,7 +29,7 @@ public class User extends BaseEntity {
     private Date suspendedDate;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "user_id")
     private List<Board> boards;
     protected User() {}
 

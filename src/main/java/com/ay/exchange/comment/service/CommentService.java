@@ -1,6 +1,9 @@
 package com.ay.exchange.comment.service;
 
-import com.ay.exchange.board.dto.request.DeleteRequest;
+import com.ay.exchange.board.entity.BoardContent;
+import com.ay.exchange.board.exception.NotFoundBoardException;
+import com.ay.exchange.board.repository.BoardContentRepository;
+import com.ay.exchange.comment.dto.request.DeleteRequest;
 import com.ay.exchange.comment.dto.request.WriteRequest;
 import com.ay.exchange.comment.entity.Comment;
 import com.ay.exchange.comment.repository.CommentRepository;
@@ -13,25 +16,43 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final BoardContentRepository boardContentRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     public void writeComment(WriteRequest writeRequest) {
-        Comment comment=Comment.builder()
-                .boardContentId(writeRequest.getBoardContentId())
+        BoardContent boardContent = boardContentRepository.findById(
+                        writeRequest.getBoardContentId())
+                .orElseThrow(
+                        () -> {
+                            throw new NotFoundBoardException();
+                        }
+                );
+
+        Comment comment = Comment.builder()
+                .boardContent(boardContent)
                 .writer(writeRequest.getWriter())
                 .content(writeRequest.getContent())
                 .depth(writeRequest.getDepth())
-                .group(writeRequest.getGroup())
+                .groupId(writeRequest.getGroupId())
+                .email(writeRequest.getEmail())
                 .build();
 
         commentRepository.save(comment);
     }
 
     public void deleteComment(DeleteRequest deleteRequest, String token) {
-        if(jwtTokenProvider.getEmail(token).equals(token)){
-            commentRepository.deleteById(deleteRequest.getCommentId());
-        }else{
+
+        if (isAuthorized(token)) {
+            if (deleteRequest.getDepth()) //자식 댓글
+                commentRepository.deleteById(deleteRequest.getCommentId());
+            else //부모 댓글
+                commentRepository.deleteAllByGroupId(deleteRequest.getGroupId());
+        } else {
             throw new InvalidUserRoleException();
         }
+    }
+
+    private boolean isAuthorized(String token) {
+        return jwtTokenProvider.getEmail(token).equals(token);
     }
 }

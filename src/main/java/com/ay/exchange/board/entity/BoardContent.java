@@ -1,13 +1,19 @@
 package com.ay.exchange.board.entity;
 
 import com.ay.exchange.comment.entity.Comment;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoardContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +34,5 @@ public class BoardContent {
     @Column(nullable = false)
     private String filePath;
 
-    public BoardContent(String content, String filePath) {
-        this.content = content;
-        this.filePath = filePath;
-    }
 
 }

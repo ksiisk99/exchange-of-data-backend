@@ -1,4 +1,4 @@
-package com.ay.exchange.board.dto.request;
+package com.ay.exchange.comment.dto.request;
 
 
 import lombok.AllArgsConstructor;
@@ -11,4 +11,6 @@ import lombok.NoArgsConstructor;
 public class DeleteRequest {
     private String email;
     private Long commentId;
+    private Boolean depth;
+    private Long groupId;
 }

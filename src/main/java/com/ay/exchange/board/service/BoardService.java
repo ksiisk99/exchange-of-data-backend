@@ -30,9 +30,6 @@ public class BoardService {
                 .professorName(writeRequest.getCategoryDto().getProfessorName())
                 .build();
 
-        BoardContent boardContent=new BoardContent(writeRequest.getContent(),"PATH");
-        boardContentRepository.save(boardContent);
-
         Board board=Board.builder()
                 .title(writeRequest.getTitle())
                 .writer(writeRequest.getWriter())
@@ -40,10 +37,14 @@ public class BoardService {
                 .numberOfSuccessfulExchanges(0)
                 .approval(false)
                 .views(1L)
-                .boardContent(boardContent)
                 .category(boardCategory)
                 .build();
         boardRepository.save(board);
+
+        BoardContent boardContent=new BoardContent(writeRequest.getContent(),"PATH");
+        boardContentRepository.save(boardContent);
+
+
 
         for(CategoryDto dto:writeRequest.getDesiredBoards()){
             BoardCategory desiredCategory=BoardCategory.builder()
