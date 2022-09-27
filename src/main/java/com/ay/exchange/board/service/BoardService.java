@@ -69,19 +69,6 @@ public class BoardService {
         }
     }
 
-    public void deleteBoard(String token, DeleteRequest deleteRequest) {
-        boardContentRepository.deleteById(deleteRequest.getBoardContentId());
-//        if(isAuthorized(token)){
-//            boardContentRepository.deleteByBoardId(deleteRequest.getBoardId());
-//        }else{
-//            throw new InvalidUserRoleException();
-//        }
-    }
-
-//    private boolean isAuthorized(String token) { //삭제기능에서 이 메소드가 무조건 사용됨 중복코드 나중에 리팩토링
-//        return jwtTokenProvider.getEmail(token).equals(token);
-//    }
-
     private GradeType getGradeType(int gradeType) {
         switch (gradeType){
             case 0:

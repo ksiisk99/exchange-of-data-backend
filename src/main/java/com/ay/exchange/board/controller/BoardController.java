@@ -21,15 +21,6 @@ public class BoardController {
         return ResponseEntity.ok(true);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> deleteBoard(
-            @RequestBody DeleteRequest deleteRequest,
-            @RequestHeader("token") String token
-    ){
-        boardService.deleteBoard(token,deleteRequest);
-        return ResponseEntity.ok(true);
-    }
-
     @GetMapping
     public ResponseEntity<Boolean>getBoardList(){
         //boardService.getBoardList();
