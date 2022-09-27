@@ -41,7 +41,11 @@ public class BoardService {
                 .build();
         boardRepository.save(board);
 
-        BoardContent boardContent=new BoardContent(writeRequest.getContent(),"PATH");
+        BoardContent boardContent= BoardContent.builder()
+                .content(writeRequest.getContent())
+                .filePath("PATH")
+                .board(board)
+                .build();
         boardContentRepository.save(boardContent);
 
 

@@ -49,12 +49,4 @@ public class Board {
 
     @Column(nullable = false)
     private Boolean approval;
-
-    @OneToOne(fetch = FetchType.LAZY
-            , cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "board_id")
-    private Board board;
-
-
-
 }

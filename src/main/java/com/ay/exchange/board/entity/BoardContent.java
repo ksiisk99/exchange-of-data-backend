@@ -34,5 +34,9 @@ public class BoardContent {
     @Column(nullable = false)
     private String filePath;
 
+    @OneToOne(fetch = FetchType.LAZY
+            , cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "board_id")
+    private Board board;
 
 }
