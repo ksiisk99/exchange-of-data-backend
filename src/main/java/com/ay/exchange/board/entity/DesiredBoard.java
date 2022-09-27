@@ -17,7 +17,7 @@ public class DesiredBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "desired_board_id")
-    private Long Id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
