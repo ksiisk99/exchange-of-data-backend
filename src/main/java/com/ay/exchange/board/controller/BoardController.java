@@ -2,10 +2,17 @@ package com.ay.exchange.board.controller;
 
 import com.ay.exchange.board.dto.request.DeleteRequest;
 import com.ay.exchange.board.dto.request.WriteRequest;
+import com.ay.exchange.board.entity.Board;
 import com.ay.exchange.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/board")
@@ -22,9 +29,9 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<Boolean>getBoardList(){
-        //boardService.getBoardList();
-
-        return ResponseEntity.ok(true);
+    public ResponseEntity<List<Board>>getBoardList(
+            @RequestParam("page") int page
+    ){
+        return ResponseEntity.ok( boardService.getBoardList(page));
     }
 }

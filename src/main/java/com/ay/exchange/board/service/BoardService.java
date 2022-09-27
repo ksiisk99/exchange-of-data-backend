@@ -12,7 +12,13 @@ import com.ay.exchange.board.repository.BoardRepository;
 import com.ay.exchange.board.repository.DesiredBoardRepository;
 import com.ay.exchange.user.exception.InvalidUserRoleException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -190,5 +196,16 @@ public class BoardService {
             default:
                 return LargeCategory.Etc;
         }
+    }
+
+    public List<Board> getBoardList(int page) {
+        PageRequest pageRequest=PageRequest.of(page-1,2,
+                Sort.by(Sort.Direction.DESC,"id"));
+        Page<Board>pages=boardRepository.findByApproval(false,pageRequest); //추후 approval true로 변경해야함
+        System.out.println(pages.getTotalPages());
+        System.out.println(pages.getTotalElements());
+        System.out.println(pages.getNumber());
+
+        return pages.getContent();
     }
 }
