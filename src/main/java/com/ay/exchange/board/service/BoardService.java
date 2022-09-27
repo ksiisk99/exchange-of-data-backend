@@ -1,6 +1,7 @@
 package com.ay.exchange.board.service;
 
 import com.ay.exchange.board.dto.CategoryDto;
+import com.ay.exchange.board.dto.request.DeleteRequest;
 import com.ay.exchange.board.dto.request.WriteRequest;
 import com.ay.exchange.board.entity.Board;
 import com.ay.exchange.board.entity.BoardContent;
@@ -9,6 +10,7 @@ import com.ay.exchange.board.entity.vo.*;
 import com.ay.exchange.board.repository.BoardContentRepository;
 import com.ay.exchange.board.repository.BoardRepository;
 import com.ay.exchange.board.repository.DesiredBoardRepository;
+import com.ay.exchange.user.exception.InvalidUserRoleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,8 +50,6 @@ public class BoardService {
                 .build();
         boardContentRepository.save(boardContent);
 
-
-
         for(CategoryDto dto:writeRequest.getDesiredBoards()){
             BoardCategory desiredCategory=BoardCategory.builder()
                     .largeCategory(getLargeCategory(dto.getLargeCategory()))
@@ -68,6 +68,19 @@ public class BoardService {
                     .build());
         }
     }
+
+    public void deleteBoard(String token, DeleteRequest deleteRequest) {
+        boardContentRepository.deleteById(deleteRequest.getBoardContentId());
+//        if(isAuthorized(token)){
+//            boardContentRepository.deleteByBoardId(deleteRequest.getBoardId());
+//        }else{
+//            throw new InvalidUserRoleException();
+//        }
+    }
+
+//    private boolean isAuthorized(String token) { //삭제기능에서 이 메소드가 무조건 사용됨 중복코드 나중에 리팩토링
+//        return jwtTokenProvider.getEmail(token).equals(token);
+//    }
 
     private GradeType getGradeType(int gradeType) {
         switch (gradeType){
@@ -191,5 +204,4 @@ public class BoardService {
                 return LargeCategory.Etc;
         }
     }
-
 }

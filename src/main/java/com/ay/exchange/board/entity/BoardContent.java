@@ -18,7 +18,7 @@ public class BoardContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_content_id")
-    private Long Id;
+    private Long id;
 
     @OneToMany(mappedBy = "boardContent"
             , cascade = CascadeType.ALL,orphanRemoval = true)

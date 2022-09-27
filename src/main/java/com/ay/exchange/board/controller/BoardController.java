@@ -1,5 +1,6 @@
 package com.ay.exchange.board.controller;
 
+import com.ay.exchange.board.dto.request.DeleteRequest;
 import com.ay.exchange.board.dto.request.WriteRequest;
 import com.ay.exchange.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,15 @@ public class BoardController {
             @RequestBody WriteRequest writeRequest
     ) {
         boardService.writeBoard(writeRequest);
+        return ResponseEntity.ok(true);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Boolean> deleteBoard(
+            @RequestBody DeleteRequest deleteRequest,
+            @RequestHeader("token") String token
+    ){
+        boardService.deleteBoard(token,deleteRequest);
         return ResponseEntity.ok(true);
     }
 
