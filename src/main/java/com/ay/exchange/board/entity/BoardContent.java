@@ -21,10 +21,6 @@ public class BoardContent {
     private Long id;
 
     @OneToMany(mappedBy = "boardContent"
-            , cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<DesiredBoard>desiredBoards;
-
-    @OneToMany(mappedBy = "boardContent"
             , cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment>comments;
 
