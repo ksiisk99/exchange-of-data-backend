@@ -1,8 +1,8 @@
 package com.ay.exchange.board.service;
 
 import com.ay.exchange.board.dto.CategoryDto;
-import com.ay.exchange.board.dto.request.DeleteRequest;
 import com.ay.exchange.board.dto.request.WriteRequest;
+import com.ay.exchange.board.dto.response.BoardResponse;
 import com.ay.exchange.board.entity.Board;
 import com.ay.exchange.board.entity.BoardContent;
 import com.ay.exchange.board.entity.DesiredBoard;
@@ -10,11 +10,9 @@ import com.ay.exchange.board.entity.vo.*;
 import com.ay.exchange.board.repository.BoardContentRepository;
 import com.ay.exchange.board.repository.BoardRepository;
 import com.ay.exchange.board.repository.DesiredBoardRepository;
-import com.ay.exchange.user.exception.InvalidUserRoleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +26,7 @@ public class BoardService {
     private final BoardContentRepository boardContentRepository;
 
     public void writeBoard(WriteRequest writeRequest) {
-        BoardCategory boardCategory=BoardCategory.builder()
+        BoardCategory boardCategory = BoardCategory.builder()
                 .largeCategory(getLargeCategory(writeRequest.getCategoryDto().getLargeCategory()))
                 .mediumCategory(getMediumCategory(writeRequest.getCategoryDto().getMediumCategory()))
                 .smallCategory(getSmallCategory(writeRequest.getCategoryDto().getSmallCategory()))
@@ -38,26 +36,26 @@ public class BoardService {
                 .professorName(writeRequest.getCategoryDto().getProfessorName())
                 .build();
 
-        Board board=Board.builder()
+        Board board = Board.builder()
                 .title(writeRequest.getTitle())
                 .writer(writeRequest.getWriter())
                 .numberOfFilePages(writeRequest.getNumberOfFilePages())
                 .numberOfSuccessfulExchanges(0)
                 .approval(false)
                 .views(1L)
-                .category(boardCategory)
+                .boardCategory(boardCategory)
                 .build();
         boardRepository.save(board);
 
-        BoardContent boardContent= BoardContent.builder()
+        BoardContent boardContent = BoardContent.builder()
                 .content(writeRequest.getContent())
                 .filePath("PATH")
                 .board(board)
                 .build();
         boardContentRepository.save(boardContent);
 
-        for(CategoryDto dto:writeRequest.getDesiredBoards()){
-            BoardCategory desiredCategory=BoardCategory.builder()
+        for (CategoryDto dto : writeRequest.getDesiredBoards()) {
+            BoardCategory desiredCategory = BoardCategory.builder()
                     .largeCategory(getLargeCategory(dto.getLargeCategory()))
                     .mediumCategory(getMediumCategory(dto.getMediumCategory()))
                     .smallCategory(getSmallCategory(dto.getSmallCategory()))
@@ -76,7 +74,7 @@ public class BoardService {
     }
 
     private GradeType getGradeType(int gradeType) {
-        switch (gradeType){
+        switch (gradeType) {
             case 0:
                 return GradeType.Freshman;
             case 1:
@@ -89,7 +87,7 @@ public class BoardService {
     }
 
     private FileType getFileType(int fileType) {
-        switch(fileType){
+        switch (fileType) {
             case 0:
                 return FileType.중간고사;
             case 1:
@@ -102,7 +100,7 @@ public class BoardService {
     }
 
     private SmallCategory getSmallCategory(int smallCategory) {
-        switch(smallCategory){
+        switch (smallCategory) {
             case 0:
                 return SmallCategory.식품영양학과;
             case 1:
@@ -153,7 +151,7 @@ public class BoardService {
     }
 
     private MediumCategory getMediumCategory(int mediumCategory) {
-        switch(mediumCategory){
+        switch (mediumCategory) {
             case 0:
                 return MediumCategory.신학대학;
             case 1:
@@ -184,7 +182,7 @@ public class BoardService {
     }
 
     private LargeCategory getLargeCategory(int largeCategory) {
-        switch(largeCategory){
+        switch (largeCategory) {
             case 0:
                 return LargeCategory.Major;
             case 1:
@@ -194,14 +192,19 @@ public class BoardService {
         }
     }
 
-    public List<Board> getBoardList(int page) {
-        PageRequest pageRequest=PageRequest.of(page-1,2,
-                Sort.by(Sort.Direction.DESC,"id"));
-        Page<Board>pages=boardRepository.findByApproval(false,pageRequest); //추후 approval true로 변경해야함
+    public BoardResponse getBoardList(int page, int mediumCategory) {
+        PageRequest pageRequest = PageRequest.of(page>0?(page - 1):1, 2,
+                Sort.by(Sort.Direction.DESC, "id"));
+        Page<Board> pages = boardRepository.findByApprovalAndBoardCategoryMediumCategory(
+                false,
+                getMediumCategory(mediumCategory),
+                pageRequest
+        ); //추후 approval true로 변경해야함
+
         System.out.println(pages.getTotalPages());
         System.out.println(pages.getTotalElements());
         System.out.println(pages.getNumber());
 
-        return pages.getContent();
+        return new BoardResponse(pages.getTotalPages(),pages.getContent());
     }
 }

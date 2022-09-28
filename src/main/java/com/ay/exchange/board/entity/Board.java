@@ -32,7 +32,7 @@ public class Board {
     private String writer;
 
     @Embedded
-    private BoardCategory category;
+    private BoardCategory boardCategory;
 
     @Column(nullable = false)
     private Long views;

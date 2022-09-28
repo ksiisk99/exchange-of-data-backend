@@ -2,6 +2,7 @@ package com.ay.exchange.board.controller;
 
 import com.ay.exchange.board.dto.request.DeleteRequest;
 import com.ay.exchange.board.dto.request.WriteRequest;
+import com.ay.exchange.board.dto.response.BoardResponse;
 import com.ay.exchange.board.entity.Board;
 import com.ay.exchange.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +29,11 @@ public class BoardController {
         return ResponseEntity.ok(true);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Board>>getBoardList(
-            @RequestParam("page") int page
+    @GetMapping("/{mediumCategory}")
+    public ResponseEntity<BoardResponse>getBoardList(
+            @RequestParam("page") int page,
+            @PathVariable("mediumCategory") int mediumCategory
     ){
-        return ResponseEntity.ok( boardService.getBoardList(page));
+        return ResponseEntity.ok( boardService.getBoardList(page, mediumCategory));
     }
 }
