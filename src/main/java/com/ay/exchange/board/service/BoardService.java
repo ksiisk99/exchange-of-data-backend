@@ -1,28 +1,22 @@
 package com.ay.exchange.board.service;
 
-import com.ay.exchange.board.dto.CategoryDto;
 import com.ay.exchange.board.dto.request.WriteRequest;
 import com.ay.exchange.board.dto.response.BoardResponse;
 import com.ay.exchange.board.entity.Board;
 import com.ay.exchange.board.entity.BoardContent;
-import com.ay.exchange.board.entity.DesiredBoard;
 import com.ay.exchange.board.entity.vo.*;
 import com.ay.exchange.board.repository.BoardContentRepository;
 import com.ay.exchange.board.repository.BoardRepository;
-import com.ay.exchange.board.repository.DesiredBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
-    private final DesiredBoardRepository desiredBoardRepository;
     private final BoardContentRepository boardContentRepository;
 
     public void writeBoard(WriteRequest writeRequest) {
@@ -54,23 +48,6 @@ public class BoardService {
                 .build();
         boardContentRepository.save(boardContent);
 
-        for (CategoryDto dto : writeRequest.getDesiredBoards()) {
-            BoardCategory desiredCategory = BoardCategory.builder()
-                    .largeCategory(getLargeCategory(dto.getLargeCategory()))
-                    .mediumCategory(getMediumCategory(dto.getMediumCategory()))
-                    .smallCategory(getSmallCategory(dto.getSmallCategory()))
-                    .fileType(getFileType(dto.getFileType()))
-                    .gradeType(getGradeType(dto.getGradeType()))
-                    .subjectName(dto.getSubjectName())
-                    .professorName(dto.getProfessorName())
-                    .build();
-
-            desiredBoardRepository.save(DesiredBoard.builder()
-                    .category(desiredCategory)
-                    .board(board)
-                    .boardContent(boardContent)
-                    .build());
-        }
     }
 
     private GradeType getGradeType(int gradeType) {

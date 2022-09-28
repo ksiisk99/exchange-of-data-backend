@@ -17,5 +17,4 @@ public class WriteRequest {
     private CategoryDto categoryDto;
     private Integer numberOfFilePages;
     private String content;
-    private List<CategoryDto> desiredBoards;
 }
