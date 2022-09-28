@@ -24,5 +24,4 @@ public enum SmallCategory {
 
     //GE
     //아리교양
-    문제해결, 융합실무, 의사소통, 인성양성, 글로벌, 리더십, 기타
 }

@@ -147,40 +147,36 @@ public class BoardService {
                 return SmallCategory.유아교육과;
             case 21:
                 return SmallCategory.신학과;
-            case 22:
-                return SmallCategory.기독교교육과;
-            case 23:
-                return SmallCategory.문제해결;
-            case 24:
-                return SmallCategory.융합실무;
-            case 25:
-                return SmallCategory.의사소통;
-            case 26:
-                return SmallCategory.인성양성;
-            case 27:
-                return SmallCategory.글로벌;
-            case 28:
-                return SmallCategory.리더십;
             default:
-                return SmallCategory.기타;
+                return SmallCategory.기독교교육과;
         }
     }
 
     private MediumCategory getMediumCategory(int mediumCategory) {
         switch(mediumCategory){
             case 0:
-                return MediumCategory.창의융합대학;
+                return MediumCategory.신학대학;
             case 1:
-                return MediumCategory.사회과학대학;
+                return MediumCategory.인문대학;
             case 2:
                 return MediumCategory.예술체육대학;
             case 3:
-                return MediumCategory.인문대학;
+                return MediumCategory.사회과학대학;
             case 4:
-                return MediumCategory.신학대학;
+                return MediumCategory.창의융합대학;
             case 5:
-                return MediumCategory.아리교양대학;
+                return MediumCategory.인성양성;
             case 6:
+                return MediumCategory.리더십;
+            case 7:
+                return MediumCategory.융합실무;
+            case 8:
+                return MediumCategory.문제해결;
+            case 9:
+                return MediumCategory.글로벌;
+            case 10:
+                return MediumCategory.의사소통;
+            case 11:
                 return MediumCategory.논문;
             default:
                 return MediumCategory.자격증;
