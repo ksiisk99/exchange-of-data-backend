@@ -3,6 +3,7 @@ package com.ay.exchange.filter;
 import com.ay.exchange.common.error.dto.ErrorDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class JwtExceptionFilter extends OncePerRequestFilter {
+//@AllArgsConstructor
+public class JwtExceptionFilter extends OncePerRequestFilter{
     @Autowired
-    private ObjectMapper mapper;
+    private ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         System.out.println("JwtExceptionFilter");
+        //System.out.println(request.toString());
+        //System.out.println(request.getContextPath());
+        //System.out.println(request.getRequestURI());
         try{
             chain.doFilter(request,response);
         }catch(JwtException e){
@@ -37,7 +42,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
 
         try {
             response.getWriter()
-                    .write(mapper.writeValueAsString(
+                    .write(objectMapper.writeValueAsString(
                             new ErrorDto(status.getReasonPhrase(),e.getMessage())));
         } catch (IOException ex) {
             throw new RuntimeException(ex);

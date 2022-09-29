@@ -122,8 +122,8 @@ public class UserService {
                 .getVerificationCode(verificationCodeToken);
 
         if(verificationCode.equals(number)){
-            String temporaryPassword = createTemporaryPassword();
             String email=jwtTokenProvider.getEmail(verificationCodeToken);
+            String temporaryPassword = createTemporaryPassword();
 
             if(updateUserPassword(
                     email
