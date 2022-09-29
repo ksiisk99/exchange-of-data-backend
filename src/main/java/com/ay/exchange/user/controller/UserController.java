@@ -48,10 +48,10 @@ public class UserController {
             , description = "회원가입을 위한 학교 웹메일 인증 or 비밀번호 찾기 시 인증번호 제공"
             , parameters = {@Parameter(name = "email", description = "학교 웹메일")}
     )
-    @GetMapping({"/sign-up/verification-code/{email}"
-            , "/find-password/verification-code/{email}"})
+    @GetMapping({"/sign-up/verification-code"
+            , "/find-password/verification-code"})
     public ResponseEntity<VerificationCodeResponse> getVerificationCode(
-            @PathVariable("email") String email
+            @RequestParam("email") String email
     ) {
         return ResponseEntity.ok(userService.getVerificationCode(email));
     }
@@ -61,9 +61,9 @@ public class UserController {
             , parameters = {@Parameter(name = "number", description = "사용자가 입력한 인증번호")
             , @Parameter(name = "token", description = "토큰에 서버에서 제공된 인증번호가 있음")}
     )
-    @GetMapping("/temporary-password/{number}")
+    @GetMapping("/temporary-password")
     public ResponseEntity<String> getTemporaryPassword(
-            @PathVariable("number") String number
+            @RequestParam("number") String number
             , @RequestHeader("token") String verificationCodeToken
     ) {
         return ResponseEntity.ok(userService
@@ -73,9 +73,9 @@ public class UserController {
     @Operation(summary = "중복 아이디 확인"
             , description = "회원가입 시 중복 아이디인지 확인"
             , parameters = {@Parameter(name = "userId", description = "유저 아이디")})
-    @GetMapping("/existence-id/{userId}")
+    @GetMapping("/existence-id")
     public ResponseEntity<Boolean> existsUserId(
-            @PathVariable("userId") String userId
+            @RequestParam("userId") String userId
     ) {
         return ResponseEntity.ok(userService.checkExistsUserId(userId));
     }
@@ -84,9 +84,9 @@ public class UserController {
             , description = "회원가입 시 중뵥 학교 웹메일인지 확인"
             , parameters = {@Parameter(name = "email", description = "학교 웹메일")}
     )
-    @GetMapping("/existence-email/{email}")
+    @GetMapping("/existence-email")
     public ResponseEntity<Boolean> existsEmail(
-            @PathVariable("email") String email
+            @RequestParam("email") String email
     ) {
         return ResponseEntity.ok(userService.checkExistsNickName(email));
     }
@@ -95,9 +95,9 @@ public class UserController {
             , description = "학교 웹메일로 아이디 찾기"
             , parameters = {@Parameter(name = "email", description = "학교 웹메일")}
     )
-    @GetMapping("/find-id/{email}")
+    @GetMapping("/find-id")
     public ResponseEntity<String> findUserId(
-            @PathVariable("email") String email
+            @RequestParam("email") String email
     ) {
         return ResponseEntity.ok(userService.findUserId(email));
     }
