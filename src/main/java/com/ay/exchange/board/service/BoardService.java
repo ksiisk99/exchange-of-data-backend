@@ -170,7 +170,7 @@ public class BoardService {
         }
     }
 
-    public BoardResponse getBoardList(int page, int mediumCategory) {
+    public BoardResponse getBoardList(Integer page, int mediumCategory) {
         PageRequest pageRequest = PageRequest.of(page>0?(page - 1):1, 2,
                 Sort.by(Sort.Direction.DESC, "id"));
         Page<BoardInfoDto> pages = boardRepository.findByApprovalAndBoardCategoryMediumCategory(

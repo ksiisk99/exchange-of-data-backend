@@ -40,9 +40,19 @@ public class BoardController {
     )
     @GetMapping("/{mediumCategory}")
     public ResponseEntity<BoardResponse> getBoardList(
-            @RequestParam("page") int page,
-            @PathVariable("mediumCategory") int mediumCategory
+            @PathVariable("mediumCategory") Integer mediumCategory,
+            @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
+            @RequestParam(name = "department", required = false) String department,
+            @RequestParam(name = "grade", required = false) String grade,
+            @RequestParam(name = "type", required = false) String type
     ) {
         return ResponseEntity.ok(boardService.getBoardList(page, mediumCategory));
     }
+//department, grade, type
+//    @GetMapping("/{mediumCategory}")
+//    public ResponseEntity<Boolean> getq(
+//            @RequestParam("asdf")String asdf
+//    ){
+//        return ResponseEntity.ok(true);
+//    }
 }
