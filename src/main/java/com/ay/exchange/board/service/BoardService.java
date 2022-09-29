@@ -1,5 +1,6 @@
 package com.ay.exchange.board.service;
 
+import com.ay.exchange.board.dto.query.BoardInfoDto;
 import com.ay.exchange.board.dto.request.WriteRequest;
 import com.ay.exchange.board.dto.response.BoardResponse;
 import com.ay.exchange.board.entity.Board;
@@ -172,7 +173,7 @@ public class BoardService {
     public BoardResponse getBoardList(int page, int mediumCategory) {
         PageRequest pageRequest = PageRequest.of(page>0?(page - 1):1, 2,
                 Sort.by(Sort.Direction.DESC, "id"));
-        Page<Board> pages = boardRepository.findByApprovalAndBoardCategoryMediumCategory(
+        Page<BoardInfoDto> pages = boardRepository.findByApprovalAndBoardCategoryMediumCategory(
                 false,
                 getMediumCategory(mediumCategory),
                 pageRequest

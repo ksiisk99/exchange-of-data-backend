@@ -1,10 +1,9 @@
 package com.ay.exchange.board.dto.response;
 
-import com.ay.exchange.board.entity.Board;
+import com.ay.exchange.board.dto.query.BoardInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -16,5 +15,5 @@ public class BoardResponse {
     private int totalPages;
 
     @Schema(description = "게시글 목록")
-    private List<Board> boardList;
+    private List<BoardInfoDto> boardList;
 }

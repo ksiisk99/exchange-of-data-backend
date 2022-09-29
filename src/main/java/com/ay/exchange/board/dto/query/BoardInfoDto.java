@@ -9,6 +9,6 @@ public interface BoardInfoDto {
     String getViews();
     BoardCategory getBoardCategory(); //게시글 조회기 때문에 필요 없을 듯 나중에 지울 예정
     Integer getNumberOfFilePages();
-    Integer getNumberOfSuccessFulExchanges();
+    Integer getNumberOfSuccessfulExchanges();
     String getCreatedDate();
 }
