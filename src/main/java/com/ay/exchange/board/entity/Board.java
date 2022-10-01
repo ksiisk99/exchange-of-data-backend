@@ -35,7 +35,7 @@ public class Board {
     private BoardCategory boardCategory;
 
     @Column(nullable = false)
-    private Long views;
+    private Integer views;
 
     @Column(nullable = false)
     private Integer numberOfFilePages;

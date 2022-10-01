@@ -14,11 +14,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardContentRepository boardContentRepository;
+    private final String REGEX="[0-9]+";
 
     public void writeBoard(WriteRequest writeRequest) {
         BoardCategory boardCategory = BoardCategory.builder()
@@ -37,7 +42,7 @@ public class BoardService {
                 .numberOfFilePages(writeRequest.getNumberOfFilePages())
                 .numberOfSuccessfulExchanges(0)
                 .approval(false)
-                .views(1L)
+                .views(1)
                 .boardCategory(boardCategory)
                 .build();
         boardRepository.save(board);
@@ -59,8 +64,10 @@ public class BoardService {
                 return GradeType.Sophomore;
             case 2:
                 return GradeType.Junior;
-            default:
+            case 3:
                 return GradeType.Senior;
+            default:
+                return null;
         }
     }
 
@@ -72,8 +79,10 @@ public class BoardService {
                 return FileType.기말고사;
             case 2:
                 return FileType.과제;
-            default:
+            case 3:
                 return FileType.요약;
+            default:
+                return null;
         }
     }
 
@@ -123,8 +132,10 @@ public class BoardService {
                 return SmallCategory.도시정보공학과;
             case 21:
                 return SmallCategory.환경에너지공학과;
-            default:
+            case 22:
                 return SmallCategory.AI융합학과;
+            default:
+                return null;
         }
     }
 
@@ -154,8 +165,10 @@ public class BoardService {
                 return MediumCategory.의사소통;
             case 11:
                 return MediumCategory.논문;
-            default:
+            case 12:
                 return MediumCategory.자격증;
+            default:
+                return null;
         }
     }
 
@@ -165,24 +178,59 @@ public class BoardService {
                 return LargeCategory.Major;
             case 1:
                 return LargeCategory.GE;
-            default:
+            case 2:
                 return LargeCategory.Etc;
+            default:
+                return null;
         }
     }
 
-    public BoardResponse getBoardList(Integer page, int mediumCategory) {
-        PageRequest pageRequest = PageRequest.of(page>0?(page - 1):1, 2,
+    public BoardResponse getBoardList(Integer page, int mediumCategory,
+                                      String department, String grade, String type
+    ) {
+        PageRequest pageRequest = PageRequest.of(page > 0 ? (page - 1) : 1, 2,
                 Sort.by(Sort.Direction.DESC, "id"));
-        Page<BoardInfoDto> pages = boardRepository.findByApprovalAndBoardCategoryMediumCategory(
-                false,
-                getMediumCategory(mediumCategory),
-                pageRequest
-        ); //추후 approval true로 변경해야함
 
-        System.out.println(pages.getTotalPages());
-        System.out.println(pages.getTotalElements());
-        System.out.println(pages.getNumber());
+        Page<BoardInfoDto> pages = boardRepository.findBoards(
+                false //추후 approval true로 변경해야함
+                , getMediumCategory(mediumCategory)
+                , pageRequest
+                , getSeparateDepartmentConditions(department)
+                , getSeparateGradeConditions(grade)
+                , getSeparateTypeConditions(type));
 
-        return new BoardResponse(pages.getTotalPages(),pages.getContent());
+//        System.out.println(pages.getTotalPages());
+//        System.out.println(pages.getTotalElements());
+//        System.out.println(pages.getNumber());
+
+        return new BoardResponse(pages.getTotalPages(), pages.getContent());
     }
+
+    private List<String> getSeparateTypeConditions(String type) {
+        return Arrays.stream(type.split(","))
+                .filter(t->t.matches(REGEX))
+                .map(t->Integer.parseInt(t))
+                .filter(t->(t>=0 && t<=3))
+                .map(t->getFileType(t).name())
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getSeparateGradeConditions(String grade) {
+        return Arrays.stream(grade.split(","))
+                .filter(g->g.matches(REGEX))
+                .map(g->Integer.parseInt(g))
+                .filter(g->(g>=0 && g<=3))
+                .map(g->getGradeType(g).name())
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getSeparateDepartmentConditions(String department) {
+        return Arrays.stream(department.split(","))
+                .filter(d->d.matches(REGEX))
+                .map(d->Integer.parseInt(d))
+                .filter(d->(d>=0 && d<=22)) //[하드코딩 리팩토링] 구현이 바뀔수도 있어서 나중에 할 예정
+                .map(d->getSmallCategory(d).name())
+                .collect(Collectors.toList());
+    }
+
 }

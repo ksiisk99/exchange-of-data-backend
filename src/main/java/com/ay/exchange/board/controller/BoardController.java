@@ -42,11 +42,12 @@ public class BoardController {
     public ResponseEntity<BoardResponse> getBoardList(
             @PathVariable("mediumCategory") Integer mediumCategory,
             @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-            @RequestParam(name = "department", required = false) String department,
-            @RequestParam(name = "grade", required = false) String grade,
-            @RequestParam(name = "type", required = false) String type
+            @RequestParam(name = "department", required = false, defaultValue = ",") String department,
+            @RequestParam(name = "grade", required = false, defaultValue = ",") String grade,
+            @RequestParam(name = "type", required = false, defaultValue = ",") String type
     ) {
-        return ResponseEntity.ok(boardService.getBoardList(page, mediumCategory));
+        return ResponseEntity.ok(boardService
+                .getBoardList(page, mediumCategory, department, grade, type));
     }
 //department, grade, type
 //    @GetMapping("/{mediumCategory}")
