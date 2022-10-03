@@ -1,6 +1,6 @@
 package com.ay.exchange.board.entity.vo;
 
-public enum SmallCategory {
+public enum DepartmentType {
     //Major
     //신학대학
     신학과, 기독교교육과,

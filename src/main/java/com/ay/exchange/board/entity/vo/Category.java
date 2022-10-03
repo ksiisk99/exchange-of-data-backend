@@ -1,6 +1,6 @@
 package com.ay.exchange.board.entity.vo;
 
-public enum MediumCategory {
+public enum Category {
     //Major (창의융합, 사회과학, 예술체육, 인문, 신학)
     신학대학, 인문대학, 예술체육대학, 사회과학대학, 창의융합대학,
 

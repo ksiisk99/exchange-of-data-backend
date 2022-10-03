@@ -1,10 +1,10 @@
 package com.ay.exchange.board.repository.querydsl.impl;
 
 import com.ay.exchange.board.dto.query.BoardInfoDto;
+import com.ay.exchange.board.entity.vo.Category;
 import com.ay.exchange.board.entity.vo.FileType;
 import com.ay.exchange.board.entity.vo.GradeType;
-import com.ay.exchange.board.entity.vo.MediumCategory;
-import com.ay.exchange.board.entity.vo.SmallCategory;
+import com.ay.exchange.board.entity.vo.DepartmentType;
 import com.ay.exchange.board.repository.querydsl.BoardQueryRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.ay.exchange.board.entity.QBoard.board;
@@ -24,7 +23,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<BoardInfoDto> findBoards(boolean apporval, MediumCategory mediumCategory, Pageable pageable, List<String> departments, List<String> grades, List<String> types) {
+    public Page<BoardInfoDto> findBoards(boolean apporval, Category category, Pageable pageable, List<String> departments, List<String> grades, List<String> types) {
         List<BoardInfoDto> pages = queryFactory
                 .select(Projections.constructor(BoardInfoDto.class
                         , board.id
@@ -41,7 +40,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
                         , gradeEq(grades)
                         , typeEq(types)
                         , board.approval.eq(apporval)
-                        , board.boardCategory.mediumCategory.eq(MediumCategory.valueOf(mediumCategory.name()))
+                        , board.boardCategory.mediumCategory.eq(Category.valueOf(category.name()))
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -54,7 +53,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
                         , gradeEq(grades)
                         , typeEq(types)
                         , board.approval.eq(apporval)
-                        , board.boardCategory.mediumCategory.eq(MediumCategory.valueOf(mediumCategory.name()))
+                        , board.boardCategory.mediumCategory.eq(Category.valueOf(category.name()))
                 )
                 .fetchOne();
 
@@ -87,7 +86,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         for (String deparment : departments) {
             booleanBuilder.or(board.boardCategory
-                    .smallCategory.eq(SmallCategory.valueOf(deparment)));
+                    .smallCategory.eq(DepartmentType.valueOf(deparment)));
         }
         return booleanBuilder;
     }

@@ -14,10 +14,9 @@ import javax.persistence.*;
 public class BoardCategory {
 
     @Builder
-    public BoardCategory(LargeCategory largeCategory, MediumCategory mediumCategory, SmallCategory smallCategory, FileType fileType, GradeType gradeType, String subjectName, String professorName) {
-        this.largeCategory = largeCategory;
-        this.mediumCategory = mediumCategory;
-        this.smallCategory = smallCategory;
+    public BoardCategory(Category category, DepartmentType departmentType, FileType fileType, GradeType gradeType, String subjectName, String professorName) {
+        this.category = category;
+        this.departmentType = departmentType;
         this.fileType = fileType;
         this.gradeType = gradeType;
         this.subjectName = subjectName;
@@ -26,15 +25,11 @@ public class BoardCategory {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private LargeCategory largeCategory;
+    private Category category;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private MediumCategory mediumCategory;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private SmallCategory smallCategory;
+    private DepartmentType departmentType;
 
     @Enumerated(EnumType.STRING)
     private FileType fileType;

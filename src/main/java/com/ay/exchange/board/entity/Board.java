@@ -1,9 +1,6 @@
 package com.ay.exchange.board.entity;
 
 import com.ay.exchange.board.entity.vo.BoardCategory;
-import com.ay.exchange.board.entity.vo.LargeCategory;
-import com.ay.exchange.board.entity.vo.MediumCategory;
-import com.ay.exchange.board.entity.vo.SmallCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

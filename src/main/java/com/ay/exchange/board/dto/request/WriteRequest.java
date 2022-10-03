@@ -1,13 +1,10 @@
 package com.ay.exchange.board.dto.request;
 
 import com.ay.exchange.board.dto.CategoryDto;
-import com.ay.exchange.board.entity.vo.LargeCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

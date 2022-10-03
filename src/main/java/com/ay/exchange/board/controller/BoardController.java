@@ -39,7 +39,7 @@ public class BoardController {
             "사회과학대학(3), 창의융합대학(4), 인성양성(5), 리더십(6), 융합실무(7), 문제해결(8), 글로벌(9), 의사소통(10),논문(11), 자격증(12)")}
     )
     @GetMapping("/{mediumCategory}")
-    public ResponseEntity<BoardResponse> getBoardList(
+    public ResponseEntity<BoardResponse> findBoardList(
             @PathVariable("mediumCategory") Integer mediumCategory,
             @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
             @RequestParam(name = "department", required = false, defaultValue = ",") String department,
