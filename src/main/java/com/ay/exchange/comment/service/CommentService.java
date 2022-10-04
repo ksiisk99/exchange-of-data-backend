@@ -20,8 +20,8 @@ public class CommentService {
     private final JwtTokenProvider jwtTokenProvider;
 
     public void writeComment(WriteRequest writeRequest) {
-        BoardContent boardContent = boardContentRepository.findById(
-                        writeRequest.getBoardContentId())
+        BoardContent boardContent = boardContentRepository
+                .findById(writeRequest.getBoardContentId()) //fk니깐 조회하지 않아도 db단에서 처리가 가능하지 않을까?
                 .orElseThrow(
                         () -> {
                             throw new NotFoundBoardException();
@@ -42,7 +42,7 @@ public class CommentService {
 
     public void deleteComment(DeleteRequest deleteRequest, String token) {
 
-        if (isAuthorized(token)) {
+        if (isAuthorized(token, deleteRequest.getEmail())) { //추후 @PreAuthorize로 해결하자
             if (deleteRequest.getDepth()) //자식 댓글
                 commentRepository.deleteById(deleteRequest.getCommentId());
             else //부모 댓글
@@ -52,7 +52,7 @@ public class CommentService {
         }
     }
 
-    private boolean isAuthorized(String token) {
-        return jwtTokenProvider.getEmail(token).equals(token);
+    private boolean isAuthorized(String token, String email) {
+        return jwtTokenProvider.getEmail(token).equals(email);
     }
 }
